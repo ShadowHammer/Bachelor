@@ -22,9 +22,9 @@ t2img = T.ToPILImage()
 img2t = T.ToTensor()
 
 # Set the working (writable) directory.
-image_dir = 'pothole_images/'
+image_dir = '/pothole_images/'
 
-working_dir = ''
+working_dir = os.getcwd()
 
 dir_pothole600 = 'pothole600/images/'
 
@@ -83,7 +83,7 @@ def read_image(image_path):
 # Validation: Check if CUDA is available
 print(f"CUDA: {torch.cuda.is_available()}")
 # ----------------------------------------------------------------------------------------------------------------------------------------#
-train_dir_pothole600 = image_dir + "training/" + dir_pothole600
+train_dir_pothole600 =working_dir + image_dir + "training/" + dir_pothole600
 #train_pothole_input = train_dir_pothole600[0]
 
 #plt.imshow(read_image(train_dir_pothole600 + "0069.png"))
@@ -107,8 +107,10 @@ def trimap2f(trimap):
 # Spot check a segmentation mask image after post-processing it
 # via trimap2f().
 print(test_img)
-im = Image.open("test_img")
+im = Image.open(train_dir_pothole600 + "/0069.png")
 I = np.array(im)
 
 print(I)
-t2img(trimap2f(I))
+im_seg=t2img(trimap2f(I))
+plt.imshow(im_seg)
+plt.show()
