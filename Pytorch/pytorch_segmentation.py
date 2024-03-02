@@ -5,16 +5,40 @@ from os import path
 import torchvision
 import torchvision.transforms as T
 from typing import Sequence
-from torchvision.transforms import functional as F
+import torchvision.transforms as transforms
+import torchvision.datasets as datasets
+from torch.utils.data import DataLoader
+import pandas as pd
 import numbers
 import random
 import numpy as np
 from PIL import Image
 from matplotlib import pyplot as plt
 import torchmetrics as TM
-from PIL import Image
+
+from customDataset import datasættet
 
 import cv2
+
+#----------- pip installs ----------------------------------------------------#
+
+#pip install torch
+#pip install torchvision
+#pip install matplotlib
+#pip install pandas
+#pip install scikit-image
+#pip3 install opencv-python 
+
+#----------- Definitioner ----------------------------------------------------#
+batch_size = 20
+resize = 244
+
+mean = [0.485, 0.456, 0.406]
+std = [0.229, 0.224, 0.225]
+
+
+
+#----------- Funktioner ------------------------------------------------------#
 
 # Convert a pytorch tensor into a PIL image
 t2img = T.ToPILImage()
@@ -114,3 +138,58 @@ print(I)
 im_seg=t2img(trimap2f(I))
 plt.imshow(im_seg)
 plt.show()
+
+# Simple torchvision compatible transform to send an input tensor
+# to a pre-specified device.
+class ToDevice(torch.nn.Module):
+    """
+    Sends the input object to the device specified in the
+    object's constructor by calling .to(device) on the object.
+    """
+    def __init__(self, device):
+        super().__init__()
+        self.device = device
+
+    def forward(self, img):
+        return img.to(self.device)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(device={device})"
+    
+train_transforms = transforms.Compose([
+    transforms.Resize((resize, resize)),
+    transforms.RandomHorizontalFlip(),
+    transforms.RandomRotation(10),
+    transforms.ToTensor(),
+    transforms.Normalize(torch.Tensor(mean),torch.Tensor(std))
+])
+
+test_transforms = transforms.Compose([
+    transforms.Resize((resize, resize)),
+    transforms.ToTensor(),
+    transforms.Normalize(torch.Tensor(mean),torch.Tensor(std))
+])
+valid_transforms = transforms.Compose([
+    transforms.Resize((resize, resize)),
+    transforms.ToTensor()
+])
+    
+
+
+root_dir = working_dir + image_dir
+train_dir = root_dir + "/training/images/"
+test_dir = root_dir + "/testing/images/"
+validation_dir = root_dir + "/validation/images/"
+
+#lav en csv fil og indsæt navnet
+dataset = datasættet(csv_file = 'data',root_dir=root_dir,
+                     transform=transforms.ToTensor())
+
+train_set = datasættet(csv_file='train_csv',root_dir=train_dir,transform=train_transforms)
+test_set = datasættet(csv_file='train_csv',root_dir=test_dir,transform=test_transforms)
+valid_set = datasættet(csv_file='train_csv',root_dir=validation_dir,transform=valid_transforms)
+
+
+train_loader = DataLoader(dataset=train_set, batch_size=batch_size, shuffle=True)
+val_loader = DataLoader(dataset=test_set, batch_size=batch_size, shuffle=True)
+test_loader = DataLoader(dataset=valid_set, batch_size=batch_size, shuffle=False)
