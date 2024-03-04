@@ -16,6 +16,9 @@ import numpy as np
 from PIL import Image, ImageFile
 
 class PotholeDataset(pl.LightningDataModule):
+    """
+    Dataset class for loading pothole images and labels.
+    """
     def __init__(self, csv_file, transform=None):
         super().__init__()
         self.annotations = pd.read_csv(csv_file)
@@ -24,6 +27,13 @@ class PotholeDataset(pl.LightningDataModule):
         return len(self.annotations)
     
     def __getitem__(self, idx):
+        """
+        Retrieves an image and its corresponding label based on the given index.
+        Args:
+            idx (int): The index of the image.
+        Returns:
+            tuple: The image and its label.
+        """
         img_path = self.data.iloc[idx, 0]  # Assuming the first column contains file paths
         label = self.data.iloc[idx, 1]     # Assuming the second column contains labels
         image = Image.open(img_path).convert("RGB")
@@ -32,6 +42,9 @@ class PotholeDataset(pl.LightningDataModule):
         return image, label
 
 class PotholeCSVDataset(pl.LightningDataModule):
+    """
+    Data module class for handling the train, test, and validation datasets.
+    """
     def __init__(self, train_data, test_data, valid_data, batch_size=64):
         super().__init__()
         self.train_data = train_data
@@ -40,6 +53,11 @@ class PotholeCSVDataset(pl.LightningDataModule):
         self.batch_size = batch_size
 
     def setup(self, stage=None):
+        """
+        Sets up the train, test, and validation datasets.
+        Args:
+            stage (str, optional): The current stage (e.g., "fit", "test"). Defaults to None.
+        """
         # Transformations for data preprocessing
         transform = transforms.Compose([
             transforms.Resize((224, 224)),
@@ -51,12 +69,27 @@ class PotholeCSVDataset(pl.LightningDataModule):
         self.valid_dataset = PotholeDataset(self.valid_data, transform=transform)
 
     def train_dataloader(self):
+        """
+        Returns the data loader for the train dataset.
+        Returns:
+            torch.utils.data.DataLoader: The train data loader.
+        """
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True)
 
     def val_dataloader(self):
+        """
+        Returns the data loader for the validation dataset.
+        Returns:
+            torch.utils.data.DataLoader: The validation data loader.
+        """
         return DataLoader(self.valid_dataset, batch_size=self.batch_size, shuffle=False)
 
     def test_dataloader(self):
+        """
+        Returns the data loader for the test dataset.
+        Returns:
+            torch.utils.data.DataLoader: The test data loader.
+        """
         return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False)
 
 class MyAccuracy(Metric):
@@ -200,9 +233,11 @@ lr = 0.001
 batch_size = 64
 epochs = 3
 absolute_path = os.path.dirname(__file__)
+
 train_path = os.path.join(absolute_path, "Pothole_yolo\\train")
 test_path = os.path.join(absolute_path, "Pothole_yolo/test")
 valid_path = os.path.join(absolute_path, "Pothole_yolo/valid")
+
 
 
 model = NN(input_size, num_classes)
