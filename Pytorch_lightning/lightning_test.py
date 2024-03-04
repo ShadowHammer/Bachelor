@@ -16,147 +16,88 @@ import numpy as np
 from PIL import Image, ImageFile
 
 class PotholeDataset(pl.LightningDataModule):
-    """
-    Dataset class for loading pothole images and labels.
-    """
-    def __init__(self, csv_file, transform=None):
+    def __init__(self, csv_file, root_dir, transform=None):
+        
+        self.root_dir = root_dir
+        self.transform = transform
+
+    
+
+class PotholeCSVDataset(pl.LightningDataModule):
+    def __init__(self, root_dir, train_data, test_data, valid_data, csv_file,  batch_size=64,):
         super().__init__()
         self.annotations = pd.read_csv(csv_file)
+        self.root_dir = root_dir
+        self.train_data = train_data
+        self.test_data = test_data
+        self.valid_data = valid_data
+        self.batch_size = batch_size
         
     def __len__(self):
         return len(self.annotations)
     
     def __getitem__(self, idx):
-        """
-        Retrieves an image and its corresponding label based on the given index.
-        Args:
-            idx (int): The index of the image.
-        Returns:
-            tuple: The image and its label.
-        """
-        img_path = self.data.iloc[idx, 0]  # Assuming the first column contains file paths
-        label = self.data.iloc[idx, 1]     # Assuming the second column contains labels
+        img_path = os.path.join(self.root_dir, self.annotations.iloc[idx, 0])     
         image = Image.open(img_path).convert("RGB")
+        label = torch.tensor(int(self.annotations.iloc[idx, 1]))
         if self.transform:
             image = self.transform(image)
         return image, label
 
-class PotholeCSVDataset(pl.LightningDataModule):
-    """
-    Data module class for handling the train, test, and validation datasets.
-    """
-    def __init__(self, train_data, test_data, valid_data, batch_size=64):
-        super().__init__()
-        self.train_data = train_data
-        self.test_data = test_data
-        self.valid_data = valid_data
-        self.batch_size = batch_size
-
     def setup(self, stage=None):
-        """
-        Sets up the train, test, and validation datasets.
-        Args:
-            stage (str, optional): The current stage (e.g., "fit", "test"). Defaults to None.
-        """
-        # Transformations for data preprocessing
         transform = transforms.Compose([
-            transforms.Resize((224, 224)),
+            transforms.Resize((244, 244)),
             transforms.ToTensor(),
         ])
-
-        self.train_dataset = PotholeDataset(self.train_data, transform=transform)
-        self.test_dataset = PotholeDataset(self.test_data, transform=transform)
-        self.valid_dataset = PotholeDataset(self.valid_data, transform=transform)
+        
+        self.train_dataset = datasets.ImageFolder(root=root_dir, transform=transform)
+        self.test_dataset = datasets.ImageFolder(root=root_dir, transform=transform)
+        self.valid_dataset = datasets.ImageFolder(root=root_dir, transform=transform)
+        
 
     def train_dataloader(self):
-        """
-        Returns the data loader for the train dataset.
-        Returns:
-            torch.utils.data.DataLoader: The train data loader.
-        """
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True)
 
     def val_dataloader(self):
-        """
-        Returns the data loader for the validation dataset.
-        Returns:
-            torch.utils.data.DataLoader: The validation data loader.
-        """
         return DataLoader(self.valid_dataset, batch_size=self.batch_size, shuffle=False)
 
     def test_dataloader(self):
-        """
-        Returns the data loader for the test dataset.
-        Returns:
-            torch.utils.data.DataLoader: The test data loader.
-        """
         return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False)
 
 class MyAccuracy(Metric):
-    """
-    Custom accuracy metric class that extends the `Metric` class from `torchmetrics`.
-    """
-
     def __init__(self):
         super().__init__()
         self.add_state("total", default=torch.tensor(0), dist_reduce_fx="sum")
         self.add_state("correct", default=torch.tensor(0), dist_reduce_fx="sum")
 
-    def update(self, preds: torch.Tensor, target: torch.Tensor):
-        """
-        Updates the accuracy metric based on the predictions and targets.
-        Args:
-            preds (torch.Tensor): The predicted values.
-            target (torch.Tensor): The target values.
-        """
+    def update(self, preds: torch.Tensor, target: torch.Tensor):        
         preds = torch.argmax(preds, dim=1)
         assert preds.shape == target.shape
         self.correct += torch.sum(preds == target)
         self.total += target.numel()
     
     def compute(self):
-        """
-        Computes the accuracy.
-        Returns:
-            torch.Tensor: The accuracy.
-        """
         return self.correct.float() / self.total.float()
 
 
 class NN(pl.LightningModule):
-    """
-    Neural network model class that extends the `LightningModule` class from `pytorch_lightning`.
-    """
     def __init__(self, input_size, num_classes):
         super().__init__()
-        self.fc1 = nn.Linear(input_size, 50)
-        self.fc2 = nn.Linear(50, num_classes)
+        
+        self.fc1 = nn.Linear(input_size, 128)
+        self.fc2 = nn.Linear(128, num_classes)
         self.loss_fn = nn.CrossEntropyLoss()
         self.accuracy = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
         self.my_accuracy = MyAccuracy()
         self.f1_score = torchmetrics.F1Score(task="multiclass", num_classes=num_classes)
-    
+
+
     def forward(self, x):
-        """
-        Forward pass of the neural network.
-        Args:
-            x (torch.Tensor): The input tensor.
-        Returns:
-            torch.Tensor: The output tensor.
-        """
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
-        return x 
+        return x
 
     def training_step(self, batch, batch_idx):
-        """
-        Training step of the neural network.
-        Args:
-            batch: The input batch.
-            batch_idx: The index of the current batch.
-        Returns:
-            dict: The dictionary containing the loss, scores, and target values.
-        """
         x, y = batch
         x = x.reshape(x.size(0), -1)
         scores = self.forward(x)
@@ -168,14 +109,6 @@ class NN(pl.LightningModule):
         return {'loss': loss, 'scores': scores, 'y': y}
     
     def validation_step(self, batch, batch_idx):
-        """
-        Validation step of the neural network.
-        Args:
-            batch: The input batch.
-            batch_idx: The index of the current batch.
-        Returns:
-            torch.Tensor: The validation loss.
-        """
         x, y = batch
         x = x.reshape(x.size(0), -1)
         scores = self.forward(x)
@@ -184,14 +117,6 @@ class NN(pl.LightningModule):
         return loss
     
     def test_step(self, batch, batch_idx):
-        """
-        Test step of the neural network.
-        Args:
-            batch: The input batch.
-            batch_idx: The index of the current batch.
-        Returns:
-            torch.Tensor: The test loss.
-        """
         x, y = batch
         x = x.reshape(x.size(0), -1)
         scores = self.forward(x)
@@ -200,14 +125,6 @@ class NN(pl.LightningModule):
         return loss
     
     def predict_step(self, batch, batch_idx):
-        """
-        Prediction step of the neural network.
-        Args:
-            batch: The input batch.
-            batch_idx: The index of the current batch.
-        Returns:
-            torch.Tensor: The predicted values.
-        """
         x, y = batch
         x = x.reshape(x.size(0), -1)
         scores = self.forward(x)
@@ -215,37 +132,32 @@ class NN(pl.LightningModule):
         return preds
     
     def configure_optimizers(self):
-        """
-        Configures the optimizer for training the neural network.
-        Returns:
-            torch.optim.Optimizer: The optimizer.
-        """
         return torch.optim.Adam(self.parameters(), lr=0.001)
 
 
 # Set device cuda for GPU if it's available otherwise run on the CPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+device = "cpu"
 # Hyperparameters
-input_size = 784
+input_size = 244*244*3
 num_classes = 2
 lr = 0.001
-batch_size = 64
+batch_size = 16
 epochs = 3
 absolute_path = os.path.dirname(__file__)
-
-train_path = os.path.join(absolute_path, "Pothole_yolo\\train")
+root_dir = os.path.join(absolute_path, "Pothole_yolo")
+train_path = os.path.join(absolute_path, "Pothole_yolo/train")
 test_path = os.path.join(absolute_path, "Pothole_yolo/test")
 valid_path = os.path.join(absolute_path, "Pothole_yolo/valid")
-
-
+csv_file = os.path.join(absolute_path, "Pothole_yolo/train/_annotations.csv")
 
 model = NN(input_size, num_classes)
 
-dm = PotholeCSVDataset(train_data=train_path, test_data=test_path, valid_data=valid_path, batch_size=batch_size)
+dm = PotholeCSVDataset(root_dir=root_dir, train_data=train_path, test_data=test_path, valid_data=valid_path, csv_file=csv_file, batch_size=batch_size)
 
 # Train Network
 # trainer.tune() keeps track of the best learning rate and other hyperparameters
+
 trainer = pl.Trainer(accelerator="gpu", devices=[0], max_epochs=epochs, precision = 16) # peek trainer.py for more options
 trainer.fit(model, dm)
 trainer.validate(model, dm)
