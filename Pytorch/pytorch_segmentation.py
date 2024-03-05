@@ -46,7 +46,7 @@ t2img = T.ToPILImage()
 img2t = T.ToTensor()
 
 # Set the working (writable) directory.
-image_dir = '\\pothole_images\\'
+image_dir = '/pothole_images/'
 
 working_dir = os.getcwd()
 
@@ -157,29 +157,51 @@ valid_transforms = transforms.Compose([
     transforms.Resize((resize, resize)),
     transforms.ToTensor()
 ])
-    
-
-
-root_dir = working_dir + image_dir
-train_dir = root_dir + "training\\"
-test_dir = root_dir + "testing\\"
-valid_dir = root_dir + "validation\\"
-
-
-if os.path.exists(train_dir) != True:
-    print("The path does not exist: " + train_dir)
-
-if os.path.exists(test_dir) != True:
-    print("The path does not exist: " + test_dir)
-
-if os.path.exists(valid_dir) != True:
-    print("The path does not exist: " + valid_dir)
-   
 
 
 
-im = Image.open(train_dir + "image (1).png")
-print(im)
+
+
+
+# Set the working (writable) directory.
+working_dir = os.getcwd()
+print(working_dir)
+image_dir = 'pothole_images\\'
+root_dir = os.path.join(working_dir , image_dir)
+print(root_dir)
+train_dir = os.path.join(root_dir , "training\\")
+print(train_dir)
+train_images = os.path.join(train_dir , "images\\")
+test_dir = os.path.join(root_dir , "testing\\")
+print(test_dir)
+test_images = os.path.join(test_dir , "images\\")
+valid_dir = os.path.join(root_dir , "validation\\")
+print(valid_dir)
+valid_images = os.path.join(valid_dir , "images\\")
+
+
+
+
+# Check if the paths exist
+if os.path.exists(train_images) != True:
+    print("The path does not exist: " + train_images)
+
+if os.path.exists(test_images) != True:
+    print("The path does not exist: " + test_images)
+
+if os.path.exists(valid_images) != True:
+    print("The path does not exist: " + valid_images)
+
+
+im = Image.open(train_images + "image (1).png")
+plt.imshow(im)
+plt.show()
+im=Image.open(test_images + "image.png")
+plt.imshow(im)
+plt.show()
+im=Image.open(valid_images + "image (1).png")
+plt.imshow(im)
+plt.show()
 I = np.array(im)
 
 print(I)
@@ -190,9 +212,9 @@ plt.show()
 #lav en csv fil og indsæt navnet
 #dataset = datasættet(csv_file = 'data',root_dir=root_dir,transform=transforms.ToTensor())
 
-train_set = datasættet(csv_file=train_dir + 'training.csv',root_dir=train_dir+"/images/",transform=train_transforms)
-test_set = datasættet(csv_file=test_dir + 'testing.csv',root_dir=test_dir+"/images/",transform=test_transforms)
-valid_set = datasættet(csv_file=valid_dir + 'validation.csv',root_dir=valid_dir+"/images/",transform=valid_transforms)
+train_set = datasættet(csv_file=os.path.join(train_dir , 'training.csv'),root_dir=train_images,transform=train_transforms)
+test_set = datasættet(csv_file=os.path.join(test_dir , 'testing.csv'),root_dir=test_images,transform=test_transforms)
+valid_set = datasættet(csv_file=os.path.join(valid_dir , 'validation.csv'),root_dir=valid_images,transform=valid_transforms)
 
 
 train_loader = DataLoader(dataset=train_set, batch_size=batch_size, shuffle=True)
@@ -208,3 +230,5 @@ print(f"Validation set: {len(valid_set)}")
 print(f"Train loader: {len(train_loader)}")
 print(f"Test loader: {len(test_loader)}")
 print(f"Validation loader: {len(val_loader)}")
+
+
