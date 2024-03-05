@@ -21,7 +21,8 @@ class PotholeDataset(pl.LightningDataModule):
         self.root_dir = root_dir
         self.transform = transform
 
-    
+def compute_loss(y_hat, y):
+        return nn.BCELoss()(y_hat, y)
 
 class PotholeCSVDataset(pl.LightningDataModule):
     def __init__(self, root_dir, train_data, test_data, valid_data, csv_file,  batch_size=64,):
@@ -84,13 +85,14 @@ class NN(pl.LightningModule):
     def __init__(self, input_size, num_classes):
         super().__init__()
         
-        self.fc1 = nn.Linear(input_size, 128)
-        self.fc2 = nn.Linear(128, num_classes)
-        self.loss_fn = nn.CrossEntropyLoss()
+        self.fc1 = nn.Linear(input_size, 244)
+        self.fc2 = nn.Linear(244, num_classes)
+        self.loss_fn = nn.HingeEmbeddingLoss() # MSELoss, other Bianry loss functions
         self.accuracy = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
         self.my_accuracy = MyAccuracy()
         self.f1_score = torchmetrics.F1Score(task="multiclass", num_classes=num_classes)
 
+    
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
@@ -136,14 +138,13 @@ class NN(pl.LightningModule):
 
 
 # Set device cuda for GPU if it's available otherwise run on the CPU
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 device = "cpu"
 # Hyperparameters
-CUDA_LAUNCH_BLOCKING=1
 input_size = 244*244*3
 num_classes = 2
 lr = 0.001
-batch_size = 16
+batch_size = 2
 epochs = 3
 absolute_path = os.path.dirname(__file__)
 root_dir = os.path.join(absolute_path, "Pothole_yolo")
@@ -159,7 +160,8 @@ dm = PotholeCSVDataset(root_dir=root_dir, train_data=train_path, test_data=test_
 # Train Network
 # trainer.tune() keeps track of the best learning rate and other hyperparameters
 
-trainer = pl.Trainer(accelerator="gpu", devices=[0], max_epochs=epochs, precision = 16) # peek trainer.py for more options
+#trainer = pl.Trainer(accelerator="gpu", devices=[0], max_epochs=epochs, precision = 16) # peek trainer.py for more options
+trainer = pl.Trainer(max_epochs=epochs, precision=16)
 trainer.fit(model, dm)
 trainer.validate(model, dm)
 trainer.test(model, dm)
