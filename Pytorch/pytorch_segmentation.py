@@ -50,8 +50,6 @@ image_dir = '/pothole_images/'
 
 working_dir = os.getcwd()
 
-dir_pothole600 = 'pothole600/images/'
-
 def save_model_checkpoint(model, cp_name):
     torch.save(model.state_dict(), os.path.join(working_dir, cp_name))
 
@@ -107,13 +105,6 @@ def read_image(image_path):
 # Validation: Check if CUDA is available
 print(f"CUDA: {torch.cuda.is_available()}")
 # ----------------------------------------------------------------------------------------------------------------------------------------#
-train_dir_pothole600 =working_dir + image_dir + "training/" + dir_pothole600
-#train_pothole_input = train_dir_pothole600[0]
-
-#plt.imshow(read_image(train_dir_pothole600 + "0069.png"))
-#im = cv2.imread(train_pothole_input[0])
-#plt.show()
-test_img = train_dir_pothole600 + "0069.png"
 
 
 from enum import IntEnum
@@ -130,14 +121,7 @@ def trimap2f(trimap):
 
 # Spot check a segmentation mask image after post-processing it
 # via trimap2f().
-print(test_img)
-im = Image.open(train_dir_pothole600 + "/0069.png")
-I = np.array(im)
 
-print(I)
-im_seg=t2img(trimap2f(I))
-plt.imshow(im_seg)
-plt.show()
 
 # Simple torchvision compatible transform to send an input tensor
 # to a pre-specified device.
@@ -173,23 +157,78 @@ valid_transforms = transforms.Compose([
     transforms.Resize((resize, resize)),
     transforms.ToTensor()
 ])
-    
 
 
-root_dir = working_dir + image_dir
-train_dir = root_dir + "/training/images/"
-test_dir = root_dir + "/testing/images/"
-validation_dir = root_dir + "/validation/images/"
+
+
+
+
+# Set the working (writable) directory.
+working_dir = os.getcwd()
+print(working_dir)
+image_dir = 'pothole_images\\'
+root_dir = os.path.join(working_dir , image_dir)
+print(root_dir)
+train_dir = os.path.join(root_dir , "training\\")
+print(train_dir)
+train_images = os.path.join(train_dir , "images\\")
+test_dir = os.path.join(root_dir , "testing\\")
+print(test_dir)
+test_images = os.path.join(test_dir , "images\\")
+valid_dir = os.path.join(root_dir , "validation\\")
+print(valid_dir)
+valid_images = os.path.join(valid_dir , "images\\")
+
+
+
+
+# Check if the paths exist
+if os.path.exists(train_images) != True:
+    print("The path does not exist: " + train_images)
+
+if os.path.exists(test_images) != True:
+    print("The path does not exist: " + test_images)
+
+if os.path.exists(valid_images) != True:
+    print("The path does not exist: " + valid_images)
+
+
+im = Image.open(train_images + "image (1).png")
+plt.imshow(im)
+plt.show()
+im=Image.open(test_images + "image.png")
+plt.imshow(im)
+plt.show()
+im=Image.open(valid_images + "image (1).png")
+plt.imshow(im)
+plt.show()
+I = np.array(im)
+
+print(I)
+im_seg=t2img(trimap2f(I))
+plt.imshow(im_seg)
+plt.show()
 
 #lav en csv fil og indsæt navnet
-dataset = datasættet(csv_file = 'data',root_dir=root_dir,
-                     transform=transforms.ToTensor())
+#dataset = datasættet(csv_file = 'data',root_dir=root_dir,transform=transforms.ToTensor())
 
-train_set = datasættet(csv_file='train_csv',root_dir=train_dir,transform=train_transforms)
-test_set = datasættet(csv_file='train_csv',root_dir=test_dir,transform=test_transforms)
-valid_set = datasættet(csv_file='train_csv',root_dir=validation_dir,transform=valid_transforms)
+train_set = datasættet(csv_file=os.path.join(train_dir , 'training.csv'),root_dir=train_images,transform=train_transforms)
+test_set = datasættet(csv_file=os.path.join(test_dir , 'testing.csv'),root_dir=test_images,transform=test_transforms)
+valid_set = datasættet(csv_file=os.path.join(valid_dir , 'validation.csv'),root_dir=valid_images,transform=valid_transforms)
 
 
 train_loader = DataLoader(dataset=train_set, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(dataset=test_set, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(dataset=valid_set, batch_size=batch_size, shuffle=False)
+
+# Check the size of the train, test and validation datasets
+print(f"Train set: {len(train_set)}")
+print(f"Test set: {len(test_set)}")
+print(f"Validation set: {len(valid_set)}")
+
+# Check the size of the train, test and validation dataloaders
+print(f"Train loader: {len(train_loader)}")
+print(f"Test loader: {len(test_loader)}")
+print(f"Validation loader: {len(val_loader)}")
+
+
