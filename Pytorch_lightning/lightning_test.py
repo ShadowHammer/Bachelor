@@ -139,6 +139,7 @@ class NN(pl.LightningModule):
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 device = "cpu"
 # Hyperparameters
+CUDA_LAUNCH_BLOCKING=1
 input_size = 244*244*3
 num_classes = 2
 lr = 0.001
