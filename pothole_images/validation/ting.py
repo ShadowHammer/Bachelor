@@ -5,3 +5,4 @@ w=csv.writer(f)
 for path, dirs, files in os.walk("C:/Users/tobia/Documents/Github/Bachelor/pothole_images/validation/images"):
     for filename in files:
         w.writerow([filename])
+
