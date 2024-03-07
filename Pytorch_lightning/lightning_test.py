@@ -152,11 +152,11 @@ class FasterRCNN(pl.LightningModule):
 
       elif total_gt == 0:
           if total_pred > 0:
-              return torch.tensor(0.).cuda()
+              return torch.tensor(0.)#.cuda()
           else:
-              return torch.tensor(1.).cuda()
+              return torch.tensor(1.)#.cuda()
       elif total_gt > 0 and total_pred == 0:
-          return torch.tensor(0.).cuda()
+          return torch.tensor(0.)#.cuda()
 
 class NN(pl.LightningModule):
     def __init__(self, input_size, num_classes):
@@ -227,8 +227,8 @@ test_path = os.path.join(absolute_path, "Pothole_yolo/test")
 valid_path = os.path.join(absolute_path, "Pothole_yolo/valid")
 csv_file = os.path.join(absolute_path, "Pothole_yolo/train/_annotations.csv")
 
-#model = NN(input_size, num_classes)
-model = FasterRCNN(num_classes, lr)
+model = NN(input_size, num_classes)
+#model = FasterRCNN(num_classes, lr)
 dm = PotholeCSVDataset(root_dir=root_dir, train_data=train_path, test_data=test_path, valid_data=valid_path, csv_file=csv_file, batch_size=batch_size)
 
 # Train Network

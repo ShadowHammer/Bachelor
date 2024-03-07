@@ -111,7 +111,6 @@ from enum import IntEnum
 class TrimapClasses(IntEnum):
     POTHOLE = 0
     BACKGROUND = 1
-    BORDER = 2
 
 # Convert a float trimap ({1, 2, 3} / 255.0) into a float tensor with
 # pixel values in the range 0.0 to 1.0 so that the border pixels
