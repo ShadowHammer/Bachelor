@@ -1,0 +1,47 @@
+{
+    "os": "Windows-11-10.0.22631-SP0",
+    "python": "3.12.2",
+    "heartbeatAt": "2024-03-08T10:09:22.514717",
+    "startedAt": "2024-03-08T10:09:18.795038",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "c:\\Users\\tobia\\Documents\\GitHub\\Bachelor\\Eksempler_fra_nettet\\wandb_clasification_test.py",
+    "codePathLocal": "Eksempler_fra_nettet\\wandb_clasification_test.py",
+    "codePath": "Eksempler_fra_nettet\\wandb_clasification_test.py",
+    "host": "DESKTOP-62BPRQK",
+    "username": "tobia",
+    "executable": "C:\\Users\\tobia\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\\python.exe",
+    "cpu_count": 12,
+    "cpu_count_logical": 20,
+    "cpu_freq": {
+        "current": 3600.0,
+        "min": 0.0,
+        "max": 3600.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3600.0,
+            "min": 0.0,
+            "max": 3600.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 930.6948204040527,
+            "used": 549.0140800476074
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 3070",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3070",
+            "memory_total": 8589934592
+        }
+    ],
+    "memory": {
+        "total": 31.775104522705078
+    }
+}
