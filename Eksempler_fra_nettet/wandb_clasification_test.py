@@ -179,10 +179,10 @@ trainer = pl.Trainer(max_epochs=10,
                                 checkpoint_callback],
                      )
 
-# Train the model ⚡🚅⚡
+# Train the model 
 trainer.fit(model, dm)
 
-# Evaluate the model on the held-out test set ⚡⚡
+# Evaluate the model on the held-out test set
 trainer.test(dataloaders=dm.test_dataloader())
 
 # Close wandb run

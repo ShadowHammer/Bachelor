@@ -1,0 +1,114 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    python_version: 3.12.2
+    cli_version: 0.16.3
+    framework: lightning
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1709893071.153208
+    t:
+      1:
+      - 1
+      - 9
+      - 41
+      - 55
+      - 103
+      2:
+      - 1
+      - 9
+      - 41
+      - 55
+      - 103
+      3:
+      - 2
+      - 7
+      - 23
+      4: 3.12.2
+      5: 0.16.3
+      8:
+      - 3
+      - 5
+      13: windows-amd64
+    m:
+    - 1: trainer/global_step
+      6:
+      - 3
+    - 1: examples._type
+      5: 1
+      6:
+      - 1
+    - 1: examples.width
+      5: 1
+      6:
+      - 1
+    - 1: examples.height
+      5: 1
+      6:
+      - 1
+    - 1: examples.format
+      5: 1
+      6:
+      - 1
+    - 1: examples.count
+      5: 1
+      6:
+      - 1
+    - 1: examples.filenames
+      5: 1
+      6:
+      - 1
+    - 1: examples.captions
+      5: 1
+      6:
+      - 1
+    - 1: train_loss_step
+      5: 1
+      6:
+      - 1
+    - 1: train_acc_step
+      5: 1
+      6:
+      - 1
+    - 1: epoch
+      5: 1
+      6:
+      - 1
+    - 1: val_loss
+      5: 1
+      6:
+      - 1
+    - 1: val_acc
+      5: 1
+      6:
+      - 1
+    - 1: train_loss_epoch
+      5: 1
+      6:
+      - 1
+    - 1: train_acc_epoch
+      5: 1
+      6:
+      - 1
+    - 1: test_loss
+      5: 1
+      6:
+      - 1
+    - 1: test_acc
+      5: 1
+      6:
+      - 1
+input_shape:
+  desc: null
+  value:
+  - 3
+  - 32
+  - 32
+num_classes:
+  desc: null
+  value: 10
+learning_rate:
+  desc: null
+  value: 0.0002
