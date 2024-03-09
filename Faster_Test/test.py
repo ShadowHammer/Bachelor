@@ -14,6 +14,8 @@ model = model().to(device)
 working_dir = os.getcwd()
 faster = 'Faster_test\\'
 faster_dir = os.path.join(working_dir,faster)
+test_predictions = 'test_predictions\\'
+test_predictions_dir = os.path.join(faster_dir , test_predictions)
 checkpoint = "checkpoints\\"
 checkpoint_dir = os.path.join(faster_dir , checkpoint)
 file = "fasterrcnn_resnet50_fpn.pth"
@@ -33,7 +35,7 @@ with torch.no_grad():
         image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB).astype(np.float32)
         # make pixel range between 0 and 1
         image /= 255.0
-        image = np.transpose(image, (2, 0, 1)).astype(np.float)
+        image = np.transpose(image, (2, 0, 1)).astype(np.float32)
         image = torch.tensor(image, dtype=torch.float).cuda()
         image = torch.unsqueeze(image, 0)
 
@@ -58,6 +60,7 @@ with torch.no_grad():
                             (int(box[0]), int(box[1]-5)),
                             cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 
                             2, lineType=cv2.LINE_AA)
-            cv2.imwrite(f"test_predictions/{test_images[i]}", orig_image,)
+
+            cv2.imwrite(test_predictions_dir + f"{test_images[i]}", orig_image,)
 
 print('TEST PREDICTIONS COMPLETE')
