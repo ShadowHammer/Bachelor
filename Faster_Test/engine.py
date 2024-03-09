@@ -2,12 +2,23 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import os
 
 from model import model
 from dataset import train_data_loader
 
 # the computation device
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'{torch.version.cuda}')
+device = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+    )
+print(f'Using {device} device')
+
+#device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = model().to(device)
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9, weight_decay=0.0005)
 
@@ -31,7 +42,14 @@ def train(train_dataloader):
     return train_loss
 
 def save_model():
-    torch.save(model.state_dict(),'checkpoint/fasterrcnn_resnet50_fpn.pth')
+    working_dir = os.getcwd()
+    faster = 'Faster_test\\'
+    faster_dir = os.path.join(working_dir,faster)
+    checkpoint = "checkpoints\\"
+    checkpoint_dir = os.path.join(faster_dir , checkpoint)
+    file = "fasterrcnn_resnet50_fpn.pth"
+    file_dir = os.path.join(checkpoint_dir , file)
+    torch.save(model.state_dict(),file_dir)
 
 def visualize():
     """

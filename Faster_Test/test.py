@@ -11,7 +11,14 @@ from model import model
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 # load the model and train weights
 model = model().to(device)
-model.load_state_dict(torch.load('checkpoints/fasterrcnn_resnet50_fpn.pth'))
+working_dir = os.getcwd()
+faster = 'Faster_test\\'
+faster_dir = os.path.join(working_dir,faster)
+checkpoint = "checkpoints\\"
+checkpoint_dir = os.path.join(faster_dir , checkpoint)
+file = "fasterrcnn_resnet50_fpn.pth"
+file_dir = os.path.join(checkpoint_dir , file)
+model.load_state_dict(torch.load(file_dir))
 
 DIR_TEST = config.TEST_PATH
 test_images = os.listdir(DIR_TEST)
