@@ -127,7 +127,7 @@ train_dataset = PotHoleDataset(train_df, DIR_INPUT, train_transform())
 train_data_loader = DataLoader(
     train_dataset,
     batch_size=config.BATCH_SIZE,
-    shuffle=False,
+    shuffle=False, # Should be true during training and false during testing
     collate_fn=collate_fn
 )
 
