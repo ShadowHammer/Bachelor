@@ -84,12 +84,12 @@
             "date_captured": "2020-11-01T23:15:06+00:00"
         },
         {
-            "id": 7,
-            "license": 1,
-            "file_name": "img-245_jpg.rf.1c9b49a366bda1cf64dbfac2a946cd38.jpg",
-            "height": 720,
-            "width": 720,
-            "date_captured": "2020-11-01T23:15:06+00:00"
+            "id":7,
+            "license":1,
+            "file_name":"img-245_jpg.rf.1c9b49a366bda1cf64dbfac2a946cd38.jpg",
+            "height":640,
+            "width":640,
+            "date_captured":"2023-01-15T15:31:47+00:00"
         },
         {
             "id": 8,
@@ -692,16 +692,16 @@
             "iscrowd": 0
         },
         {
-            "id": 9,
-            "image_id": 7,
-            "category_id": 1,
-            "bbox": [
-                359,
-                221,
-                103,
-                89
+            "id":9,
+            "image_id":7,
+            "category_id":1,
+            "bbox" : [
+                21,
+                226,
+                601.021,
+                169.099
             ],
-            "area": 9167,
+            "area":101631.759,
             "segmentation": [],
             "iscrowd": 0
         },
