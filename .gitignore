@@ -2,3 +2,4 @@
 *.pth
 *.ckpt
 *.yaml
+*.csv
