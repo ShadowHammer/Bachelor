@@ -1,0 +1,9 @@
+train: ./data/train
+val: ./data/valid
+test: ./data/test
+
+# number of classes
+nc: 1
+
+# class names
+names: [ 'pothole']

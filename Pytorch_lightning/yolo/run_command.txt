@@ -1,0 +1,11 @@
+yolov7:
+Train:
+python train.py --workers 1 --device 0 --batch-size 8 --epochs 1 --img 640 640 --data data/custom_data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-custom.yaml --name yolov7-custom --weights yolov7.pt
+Valid-virker ikke:
+python detect.py --weights yolov7_custom.py - conf 0.5 --img-size 640 --source 1.jpg --view-img --no-trace
+Test:
+python test.py --device 0 --batch-size 8  --img 640 --data data/custom_data.yaml --name yolov7-custom --weights yolov7_custom.pt --conf 0.001 --iou 0.65
+
+yolov9:
+Train:
+python train_dual.py --workers 1 --device 0 --batch 8 --data data/custom_data.yaml --img 640 --cfg models/detect/yolov9_custom.yaml --weights '' --name yolov9-c-custom --hyp hyp.scratch-high.yaml --min-items 0 --epochs 1 --close-mosaic 15
