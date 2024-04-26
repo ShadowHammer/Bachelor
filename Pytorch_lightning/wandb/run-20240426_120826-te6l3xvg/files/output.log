@@ -1,0 +1,93 @@
+Using hurtig model
+Sanity Checking DataLoader 0:   0%|          | 0/2 [00:00<?, ?it/s]validate:  0.0
+Sanity Checking DataLoader 0:  50%|█████     | 1/2 [00:00<00:00,  1.50it/s]validate:  0.0
+Epoch 0:   2%|▏         | 13/710 [00:01<00:57, 12.09it/s, v_num=3xvg]
+[34m[1mwandb[39m[22m: logging graph, to disable use `wandb.watch(log_graph=False)`
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+You are using a CUDA device ('NVIDIA GeForce RTX 3070') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+C:\Users\tobia\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\torchvision\models\_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+C:\Users\tobia\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\torchvision\models\_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=FasterRCNN_MobileNet_V3_Large_320_FPN_Weights.COCO_V1`. You can also use `weights=FasterRCNN_MobileNet_V3_Large_320_FPN_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+  | Name  | Type              | Params
+--------------------------------------------
+0 | model | FasterRCNN        | 19.4 M
+1 | loss  | BCEWithLogitsLoss | 0
+--------------------------------------------
+19.3 M    Trainable params
+58.9 K    Non-trainable params
+19.4 M    Total params
+77.545    Total estimated model params size (MB)
+C:\Users\tobia\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\pytorch_lightning\trainer\connectors\data_connector.py:441: The 'val_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=19` in the `DataLoader` to improve performance.
+C:\Users\tobia\AppData\Local\Temp\ipykernel_28576\3609768078.py:51: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  image = torch.tensor(image, dtype=torch.float32).div(255)
+C:\Users\tobia\AppData\Local\Temp\ipykernel_28576\3609768078.py:54: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  targ = {key: torch.tensor(val) for key, val in targ.items()}
+C:\Users\tobia\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\pytorch_lightning\utilities\data.py:77: Trying to infer the `batch_size` from an ambiguous collection. The batch size we found is 3. To avoid any miscalculations, use `self.log(..., batch_size=batch_size)`.
+C:\Users\tobia\AppData\Local\Temp\ipykernel_28576\3609768078.py:51: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  image = torch.tensor(image, dtype=torch.float32).div(255)
+C:\Users\tobia\AppData\Local\Temp\ipykernel_28576\3609768078.py:54: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  targ = {key: torch.tensor(val) for key, val in targ.items()}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Epoch 0: 100%|██████████| 710/710 [00:48<00:00, 14.62it/s, v_nuvalidate:  0.0
+Validation DataLoader 0:   0%|          | 0/24 [00:00<?, ?it/s]        validate:  0.0
+Validation DataLoader 0:   4%|▍         | 1/24 [00:00<00:00, 29.16it/s]validate:  0.0
+Validation DataLoader 0:   8%|▊         | 2/24 [00:00<00:00, 25.51it/s]validate:  0.0
+Validation DataLoader 0:  12%|█▎        | 3/24 [00:00<00:00, 23.33it/s]validate:  0.0
+Validation DataLoader 0:  17%|█▋        | 4/24 [00:00<00:00, 22.90it/s]validate:  0.0
+Validation DataLoader 0:  21%|██        | 5/24 [00:00<00:00, 22.81it/s]validate:  0.0
+Validation DataLoader 0:  25%|██▌       | 6/24 [00:00<00:00, 22.64it/s]validate:  0.0
+Validation DataLoader 0:  29%|██▉       | 7/24 [00:00<00:00, 22.63it/s]validate:  0.0
+Validation DataLoader 0:  33%|███▎      | 8/24 [00:00<00:00, 22.26it/s]validate:  0.0
+Validation DataLoader 0:  38%|███▊      | 9/24 [00:00<00:00, 22.17it/s] validate:  0.0
+Validation DataLoader 0:  42%|████▏     | 10/24 [00:00<00:00, 22.17it/s]validate:  0.0
+Validation DataLoader 0:  46%|████▌     | 11/24 [00:00<00:00, 22.12it/s]validate:  0.0
+Validation DataLoader 0:  50%|█████     | 12/24 [00:00<00:00, 22.21it/s]validate:  0.0
+Validation DataLoader 0:  54%|█████▍    | 13/24 [00:00<00:00, 22.17it/s]validate:  0.0
+Validation DataLoader 0:  58%|█████▊    | 14/24 [00:00<00:00, 22.04it/s]
+Validation DataLoader 0:  62%|██████▎   | 15/24 [00:00<00:00, 22.09it/s]validate:  0.0
+Validation DataLoader 0:  67%|██████▋   | 16/24 [00:00<00:00, 22.20it/s]validate:  0.0
+Validation DataLoader 0:  71%|███████   | 17/24 [00:00<00:00, 22.18it/s]validate:  0.0
+Validation DataLoader 0:  75%|███████▌  | 18/24 [00:00<00:00, 22.21it/s]validate:  0.0
+Validation DataLoader 0:  79%|███████▉  | 19/24 [00:00<00:00, 22.24it/s]validate:  0.0
+Validation DataLoader 0:  83%|████████▎ | 20/24 [00:00<00:00, 22.16it/s]validate:  0.0
+Validation DataLoader 0:  88%|████████▊ | 21/24 [00:00<00:00, 22.16it/s]validate:  0.0
+Validation DataLoader 0:  92%|█████████▏| 22/24 [00:00<00:00, 22.14it/s]validate:  0.0
+
+
+
+
+
+
+
+
+
+
+
+
