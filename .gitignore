@@ -3,3 +3,5 @@
 *.ckpt
 *.yaml
 *.csv
+/Pytorch_lightning/wandb
+/Pytorch_lightning/lightning_logs
