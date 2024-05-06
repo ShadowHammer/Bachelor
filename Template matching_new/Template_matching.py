@@ -38,7 +38,19 @@ for j in range(len(images)):
          bottom_right = (top_left[0] + w, top_left[1] + h)
       
       plt.subplot(2,len(methods),i),plt.imshow(res,cmap = 'gray')
-      plt.title(f'{meth}')
+      if meth == "cv.TM_CCOEFF":
+         plt.title("MR_CCOEFF")
+      elif meth == "cv.TM_CCOEFF_NORMED":
+         plt.title("MR_CCOEFF_NORMED")
+      elif meth == "cv.TM_CCORR":
+         plt.title("MR_CCORR")
+      elif meth == "cv.TM_CCORR_NORMED":
+         plt.title("MR_CCORR_NORMED")
+      elif meth == "cv.TM_SQDIFF":
+         plt.title("MR_SQDIFF")
+      elif meth == "cv.TM_SQDIFF_NORMED":
+         plt.title("MR_SQDIFF_NORMED")
+
       plt.axis('off')
       i += 1
       img_with_rect = cv.cvtColor(images[j], cv.COLOR_GRAY2RGB)
@@ -46,7 +58,18 @@ for j in range(len(images)):
 
       plt.subplot(2, len(methods), i)
       plt.imshow(img_with_rect)
-      plt.title(meth)
+      if meth == "cv.TM_CCOEFF":
+         plt.title("CCOEFF")
+      elif meth == "cv.TM_CCOEFF_NORMED":
+         plt.title("CCOEFF_NORMED")
+      elif meth == "cv.TM_CCORR":
+         plt.title("CCORR")
+      elif meth == "cv.TM_CCORR_NORMED":
+         plt.title("CCORR_NORMED")
+      elif meth == "cv.TM_SQDIFF":
+         plt.title("SQDIFF")
+      elif meth == "cv.TM_SQDIFF_NORMED":
+         plt.title("SQDIFF_NORMED")
       plt.axis('off')
       i += 1
    
