@@ -5,3 +5,4 @@
 *.csv
 /Pytorch_lightning/wandb
 /Pytorch_lightning/lightning_logs
+/Pytorch_lightning/saved_images
