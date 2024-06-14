@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['pothole']
+
+roboflow:
+  workspace: imacs-pothole-detection-wo8mu
+  project: pothole-detection-irkz9
+  version: 9
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/imacs-pothole-detection-wo8mu/pothole-detection-irkz9/dataset/9
